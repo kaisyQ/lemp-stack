@@ -3,4 +3,8 @@
 require_once __DIR__ . "/Application/bootstrap.php";
 
 
-echo $repository->getTwoRecords();
+$list = $repository->getTwoRecords();
+
+$html = "<ul>" . implode("<br>", array_map(static fn ($row): string  => $row['name'], $list)) . "</ul>";
+
+echo $html;

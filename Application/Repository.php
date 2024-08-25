@@ -8,18 +8,20 @@ use Application\Abstractions\RepositoryInterface;
 
 final readonly class Repository implements RepositoryInterface
 {
-    private DbInterface $db;
-    public function __construct(DbInterface $db)
-    {
-        $this->db = $db;
-    }
-
+    public function __construct(
+        private DbInterface $db
+    ){}
 
     public function getTwoRecords(): array 
     {
-        return [
-            ['id' => 1],
-            ['id' => 2]
-        ];
+
+        $sql = 'select l.name from  lemp_stack.test as l limit 2';
+
+        $result = $this->db
+            ->prepare($sql)
+            ->execute([])
+            ->fetchAll();
+
+        return $result;
     }
 }

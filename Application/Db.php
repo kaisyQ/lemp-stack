@@ -3,13 +3,24 @@
 namespace Application;
 
 use Application\Abstractions\DbInterface;
+use Application\Params\DbParams;
 
 final readonly class Db implements DbInterface {
     private \PDO $pdo;
     private \PDOStatement $statement;
-    public function __construct(string $dsn, string $username, string $password)
+    
+    private const DB_TEMPLATE = "mysql:dbname=%s;host=%s;port=%d;charset=utf8";
+
+    public function __construct(DbParams $params)
     {
-        // $this->pdo = new \PDO($dsn, $username, $password);
+
+        $tdsn = "mysql:dbname=lemp_stack;host=localhost;port=3306;charset=utf8";
+
+        $this->pdo = new \PDO(
+            sprintf(self::DB_TEMPLATE, $params->dbName, $params->dbHost, $params->dbPort), 
+            $params->dbUser, 
+            $params->dbPassword
+        );
     }
 
 
@@ -48,9 +59,9 @@ final readonly class Db implements DbInterface {
         return $result;
     }
 
-    public static function build(string $dsn, string $username, string $password)
+    public static function build(DbParams $params)
     {
-        return new self($dsn, $username, $password);
+        return new self($params);
     }
 
 
